@@ -35,6 +35,7 @@ class Player {
 
     fall() {
         this.character()
+        this.position.x += this.velocity.x
         this.position.y += this.velocity.y
 
         if(
@@ -44,19 +45,134 @@ class Player {
         else this.velocity.y = 0
     }
 }
+//platform
+class Platform {
+    constructor() {
+        this.position = {
+            x: 300,
+            y: 500,
+        }
 
+        this.width = 200
+        this.height = 20
+    }
+
+    draw() {
+        context.fillStyle = 'red'
+        context.fillRect(this.position.x, this.position.y, this.width, this.height)
+    }
+}
+
+//consts
 const player = new Player()
+const platform = new Platform()
 
+const keys = {
+    right: {
+        pressed: false
+    },
+    left: {
+        pressed: false
+    },
+//    up: {
+//        pressed: false
+//    }
+}
+
+//movement function
 function movement() {
     requestAnimationFrame(movement)
     context.clearRect(0, 0, canvas.width, canvas.height)
     player.fall()
+    platform.draw()
+
+//left right movement
+    if (keys.right.pressed && player.position.x < 500) {
+        player.velocity.x = 5
+    }
+    else if (keys.left.pressed && player.position.x > 100) {
+        player.velocity.x = -5
+    }
+//    else if (keys.up.pressed) {
+//        player.velocity.y -= 20
+//    }
+    else {
+        player.velocity.x = 0
+
+        if (keys.right.pressed) {
+            platform.position.x -= 5
+        }
+        else if (keys.left.pressed) {
+            platform.position.x += 5
+        }
+    }
+//remove double jump?
+
+//platform landing
+    if (player.position.y + player.height <= 
+        platform.position.y && 
+        player.position.y + player.height + player.velocity.y >=
+        platform.position.y &&
+        player.position.x + player.width >=
+        platform.position.x &&
+        player.position.x <=
+        platform.position.x + platform.width) {
+        player.velocity.y = 0
+
+        console.log('fall')
+    }
 }
 movement()
 
+//key movements
+addEventListener('keydown', ({ keyCode }) => {
+    console.log(keyCode)
+    switch (keyCode) {
+        case 65:
+            console.log('left')
+            keys.left.pressed = true
+            break;
+        
+        case 83:
+            console.log('down')
+            break
+        
+        case 68:
+            console.log('right')
+            keys.right.pressed = true
+            break;
 
-//moving
+        case 87:
+            console.log('up')
+//            keys.up.pressed = true
+            player.velocity.y -= 20
+            break
+    }
+})
 
+addEventListener('keyup', ({ keyCode }) => {
+    console.log(keyCode)
+    switch (keyCode) {
+        case 65:
+            console.log('left')
+            keys.left.pressed = false
+            break
+        
+        case 83:
+            console.log('down')
+            break
+        
+        case 68:
+            console.log('right')
+            keys.right.pressed = false
+            break;
+
+        case 87:
+            console.log('up')
+ //           keys.up.pressed = false
+            break
+    }
+})
 
 
 //add images part
