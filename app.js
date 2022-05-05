@@ -1,5 +1,7 @@
 //https://www.youtube.com/watch?v=4q2vvZn5aoo&t=278s
 
+//imports
+
 //canvas
 const canvas = document.querySelector('canvas')
 const context = canvas.getContext('2d')
@@ -10,6 +12,17 @@ canvas.height = document.body.clientHeight
 
 //gravity
 const gravity = 0.5
+
+//new image
+function newImage(url){
+    let image = document.createElement('img')
+    image.src = url
+    document.body.append(image)
+    return image
+}
+
+const platf0rm = newImage('assets/platform.png')
+console.log('bitch')
 
 //character
 class Player {
@@ -47,10 +60,10 @@ class Player {
 }
 //platform
 class Platform {
-    constructor() {
+    constructor({ x, y }) {
         this.position = {
-            x: 300,
-            y: 500,
+            x: x,
+            y: y,
         }
 
         this.width = 200
@@ -65,7 +78,7 @@ class Platform {
 
 //consts
 const player = new Player()
-const platform = new Platform()
+const platforms = [new Platform({x:300, y:500}), new Platform({x:600, y:625})]
 
 const keys = {
     right: {
@@ -79,12 +92,17 @@ const keys = {
 //    }
 }
 
+//how far we go
+let scrollOffset = 0
+
 //movement function
 function movement() {
     requestAnimationFrame(movement)
     context.clearRect(0, 0, canvas.width, canvas.height)
     player.fall()
-    platform.draw()
+    platforms.forEach((platform) => {
+        platform.draw()
+    })
 
 //left right movement
     if (keys.right.pressed && player.position.x < 500) {
@@ -100,26 +118,37 @@ function movement() {
         player.velocity.x = 0
 
         if (keys.right.pressed) {
-            platform.position.x -= 5
+            scrollOffset += 5
+            platforms.forEach((platform) => {
+                platform.position.x -= 5
+            })
         }
         else if (keys.left.pressed) {
-            platform.position.x += 5
+            scrollOffset -= 5
+            platforms.forEach((platform) => {
+                platform.position.x += 5
+            })
         }
     }
+
+//    console.log(scrollOffset)
 //remove double jump?
 
 //platform landing
-    if (player.position.y + player.height <= 
-        platform.position.y && 
-        player.position.y + player.height + player.velocity.y >=
-        platform.position.y &&
-        player.position.x + player.width >=
-        platform.position.x &&
-        player.position.x <=
-        platform.position.x + platform.width) {
-        player.velocity.y = 0
-
-        console.log('fall')
+    platforms.forEach((platform) => {
+        if (player.position.y + player.height <= 
+            platform.position.y && 
+            player.position.y + player.height + player.velocity.y >=
+            platform.position.y &&
+            player.position.x + player.width >=
+            platform.position.x &&
+            player.position.x <=
+            platform.position.x + platform.width) {
+            player.velocity.y = 0
+        }
+    })
+    if (scrollOffset > 2000) {
+        console.log('you win')
     }
 }
 movement()
