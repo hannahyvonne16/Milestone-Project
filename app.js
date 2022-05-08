@@ -7,8 +7,10 @@ const canvas = document.querySelector('canvas')
 const context = canvas.getContext('2d')
 
 console.log(context)
-canvas.width = document.body.clientWidth
-canvas.height = document.body.clientHeight
+canvas.width = 1176
+//document.body.clientWidth
+canvas.height = 730
+//document.body.clientHeight
 
 //gravity
 const gravity = 0.5
@@ -20,9 +22,6 @@ function newImage(url){
     document.body.append(image)
     return image
 }
-
-const platf0rm = newImage('assets/platform.png')
-console.log('bitch')
 
 //character
 class Player {
@@ -60,25 +59,69 @@ class Player {
 }
 //platform
 class Platform {
-    constructor({ x, y }) {
+    constructor({ x, y, image }) {
         this.position = {
             x: x,
             y: y,
         }
 
-        this.width = 200
+        this.image = image
+        this.width = image.width
+        this.height = image.height
+    }
+
+    draw() {
+        context.drawImage(this.image, this.position.x, this.position.y)
+    }
+}
+
+//background stuff
+class BackgroundStuff {
+    constructor({ x, y, image }) {
+        this.position = {
+            x: x,
+            y: y,
+        }
+
+        this.image = image
+        this.width = image.width
         this.height = 20
     }
 
     draw() {
-        context.fillStyle = 'red'
-        context.fillRect(this.position.x, this.position.y, this.width, this.height)
+        context.drawImage(this.image, this.position.x, this.position.y)
     }
 }
 
 //consts
+const platformImage = new Image()
+platformImage.src = './assets/platform.png'
+const backgroundImage = new Image()
+backgroundImage.src = './assets/background.png'
+const hillsImage = new Image()
+hillsImage.src = './assets/hills.png'
+
 const player = new Player()
-const platforms = [new Platform({x:300, y:500}), new Platform({x:600, y:625})]
+const platforms = [
+    new Platform({
+        x:-1,
+        y:620,
+        image: platformImage,
+    }), 
+    new Platform({
+        x:platformImage.width - 3, 
+        y:620,
+        image: platformImage
+    })
+]
+
+const BackgroundThing = [
+    new BackgroundStuff({
+        x:-1,
+        y:-1,
+        image: backgroundImage,
+    })
+]
 
 const keys = {
     right: {
@@ -98,11 +141,19 @@ let scrollOffset = 0
 //movement function
 function movement() {
     requestAnimationFrame(movement)
-    context.clearRect(0, 0, canvas.width, canvas.height)
-    player.fall()
+    context.fillStyle = 'white'
+    context.fillRect(0, 0, canvas.width, canvas.height)
+
+    BackgroundThing.forEach(BackgroundStuff => {
+        BackgroundStuff.draw()
+    })
+
+
+
     platforms.forEach((platform) => {
         platform.draw()
     })
+    player.fall()
 
 //left right movement
     if (keys.right.pressed && player.position.x < 500) {
