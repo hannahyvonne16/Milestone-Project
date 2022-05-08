@@ -23,6 +23,30 @@ function newImage(url){
     return image
 }
 
+//images
+const platformImage = new Image()
+platformImage.src = './assets/platform.png'
+const backgroundImage = new Image()
+backgroundImage.src = './assets/background.png'
+const hillsImage = new Image()
+hillsImage.src = './assets/hills.png'
+const idleRight = new Image()
+idleRight.src = './assets/idleRight.png'
+const idleLeft = new Image()
+idleLeft.src = './assets/idleLeft.png'
+const runRight = new Image()
+runRight.src = './assets/runRight.png'
+const runLeft = new Image()
+runLeft.src = './assets/runLeft.png'
+const jumpRight = new Image()
+jumpRight.src = './assets/jumpRight.png'
+const jumpLeft = new Image()
+jumpLeft.src = './assets/jumpLeft.png'
+const fallRight = new Image()
+fallRight.src = './assets/fallRight.png'
+const fallLeft = new Image()
+fallLeft.src = './assets/fallLeft.png'
+
 //character
 class Player {
     constructor() {
@@ -36,16 +60,48 @@ class Player {
             y: 0
         }
 
-        this.width = 50
-        this.height = 50
+        this.width = 220
+        this.height = 150
+
+        this.image = idleRight
+        this.frames = 0
+        this.sprites = {
+           idle: {
+               right: idleRight,
+               left: idleLeft
+           },
+           run: {
+               right: runRight,
+               left: runLeft
+           }
         }
+        this.currentSprite = this.sprites.idle.right
+
+    }
     
     character() {
-        context.fillStyle = 'blue'
-        context.fillRect(this.position.x, this.position.y, this.width, this.height)
+        context.drawImage(
+            this.currentSprite,
+            1268 * this.frames,
+            0,
+            1268,
+            819,
+            this.position.x,
+            this.position.y,
+            this.width,
+            this.height
+        )
     }
 
     fall() {
+        this.frames++
+        //if (this.frames >17) this.frames = 0
+        if (keys.right.pressed || keys.left.pressed) {
+            if (this.frames >11) this.frames = 0
+        }
+        else {
+            if (this.frames >17) this.frames = 0
+        }
         this.character()
         this.position.x += this.velocity.x
         this.position.y += this.velocity.y
@@ -94,13 +150,6 @@ class BackgroundStuff {
 }
 
 //consts
-const platformImage = new Image()
-platformImage.src = './assets/platform.png'
-const backgroundImage = new Image()
-backgroundImage.src = './assets/background.png'
-const hillsImage = new Image()
-hillsImage.src = './assets/hills.png'
-
 const player = new Player()
 const platforms = [
     new Platform({
@@ -222,6 +271,7 @@ addEventListener('keydown', ({ keyCode }) => {
         case 65:
             console.log('left')
             keys.left.pressed = true
+            player.currentSprite = player.sprites.run.left
             break;
         
         case 83:
@@ -231,6 +281,7 @@ addEventListener('keydown', ({ keyCode }) => {
         case 68:
             console.log('right')
             keys.right.pressed = true
+            player.currentSprite = player.sprites.run.right
             break;
 
         case 87:
@@ -247,6 +298,7 @@ addEventListener('keyup', ({ keyCode }) => {
         case 65:
             console.log('left')
             keys.left.pressed = false
+            player.currentSprite = player.sprites.idle.left
             break
         
         case 83:
@@ -256,6 +308,7 @@ addEventListener('keyup', ({ keyCode }) => {
         case 68:
             console.log('right')
             keys.right.pressed = false
+            player.currentSprite = player.sprites.idle.right
             break;
 
         case 87:
