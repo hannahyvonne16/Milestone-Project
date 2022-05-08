@@ -120,7 +120,12 @@ const BackgroundThing = [
         x:-1,
         y:-1,
         image: backgroundImage,
-    })
+    }),
+    new BackgroundStuff({
+        x:0,
+        y:200,
+        image: hillsImage,
+    }),
 ]
 
 const keys = {
@@ -173,11 +178,17 @@ function movement() {
             platforms.forEach((platform) => {
                 platform.position.x -= 5
             })
+            BackgroundThing.forEach(BackgroundStuff => {
+                BackgroundStuff.position.x -= 3
+            })
         }
         else if (keys.left.pressed) {
             scrollOffset -= 5
             platforms.forEach((platform) => {
                 platform.position.x += 5
+            })
+            BackgroundThing.forEach(BackgroundStuff => {
+                BackgroundStuff.position.x += 3
             })
         }
     }
