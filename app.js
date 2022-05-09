@@ -394,7 +394,10 @@ addEventListener('keydown', ({ keyCode }) => {
 
         case 87:
             console.log('up')
-            player.velocity.y -= 20
+            if (event.repeat) {
+                return
+            }
+            player.velocity.y -= 15
             break
     }
 })
