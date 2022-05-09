@@ -1,7 +1,5 @@
 //https://www.youtube.com/watch?v=4q2vvZn5aoo&t=278s
 
-//imports
-
 //canvas
 const canvas = document.querySelector('canvas')
 const context = canvas.getContext('2d')
@@ -14,14 +12,6 @@ canvas.height = 730
 
 //gravity
 const gravity = 0.5
-
-//new image
-function newImage(url){
-    let image = document.createElement('img')
-    image.src = url
-    document.body.append(image)
-    return image
-}
 
 //images
 const platformImage = new Image()
@@ -95,12 +85,11 @@ class Player {
 
     fall() {
         this.frames++
-        //if (this.frames >17) this.frames = 0
-        if (keys.right.pressed || keys.left.pressed) {
-            if (this.frames >11) this.frames = 0
+        if (this.frames > 17 && (this.currentSprite === this.sprites.idle.right || this.currentSprite === this.sprites.idle.left)) {
+            this.frames = 0
         }
-        else {
-            if (this.frames >17) this.frames = 0
+        else if (this.frames > 11 && (this.currentSprite === this.sprites.run.right || this.currentSprite === this.sprites.run.left)) {
+            this.frames = 0
         }
         this.character()
         this.position.x += this.velocity.x
@@ -110,7 +99,6 @@ class Player {
             this.position.y + this.height + this.velocity.y <= canvas.height)
         this.velocity.y += gravity
         
-        else this.velocity.y = 0
     }
 }
 //platform
@@ -149,9 +137,10 @@ class BackgroundStuff {
     }
 }
 
-//consts
-const player = new Player()
-const platforms = [
+
+//base
+let player = new Player()
+let platforms = [
     new Platform({
         x:-1,
         y:620,
@@ -161,10 +150,45 @@ const platforms = [
         x:platformImage.width - 3, 
         y:620,
         image: platformImage
+    }), 
+    new Platform({
+        x:platformImage.width * 2 - 5, 
+        y:620,
+        image: platformImage
+    }), 
+    new Platform({
+        x:platformImage.width * 3 + 400, 
+        y:620,
+        image: platformImage
+    }), 
+    new Platform({
+        x:platformImage.width * 4 - 9, 
+        y:620,
+        image: platformImage
+    }), 
+    new Platform({
+        x:platformImage.width * 5 - 11, 
+        y:620,
+        image: platformImage
+    }), 
+    new Platform({
+        x:platformImage.width * 6 - 13, 
+        y:620,
+        image: platformImage
+    }), 
+    new Platform({
+        x:platformImage.width * 7 - 15, 
+        y:620,
+        image: platformImage
+    }), 
+    new Platform({
+        x:platformImage.width * 8 - 17, 
+        y:620,
+        image: platformImage
     })
 ]
 
-const BackgroundThing = [
+let BackgroundThing = [
     new BackgroundStuff({
         x:-1,
         y:-1,
@@ -177,20 +201,86 @@ const BackgroundThing = [
     }),
 ]
 
+let theKey
+
 const keys = {
     right: {
         pressed: false
     },
     left: {
         pressed: false
-    },
-//    up: {
-//        pressed: false
-//    }
+    }
 }
 
 //how far we go
 let scrollOffset = 0
+
+//restart
+function init() {
+    player = new Player()
+    platforms = [
+        new Platform({
+            x:-1,
+            y:620,
+            image: platformImage,
+        }), 
+        new Platform({
+            x:platformImage.width - 3, 
+            y:620,
+            image: platformImage
+        }), 
+       new Platform({
+            x:platformImage.width * 2 - 5, 
+            y:620,
+            image: platformImage
+        }), 
+        new Platform({
+            x:platformImage.width * 3 + 400, 
+            y:620,
+            image: platformImage
+        }), 
+        new Platform({
+            x:platformImage.width * 4 - 9, 
+            y:620,
+            image: platformImage
+        }), 
+        new Platform({
+            x:platformImage.width * 5 - 11, 
+            y:620,
+            image: platformImage
+        }), 
+        new Platform({
+            x:platformImage.width * 6 - 13, 
+            y:620,
+            image: platformImage
+        }), 
+        new Platform({
+            x:platformImage.width * 7 - 15, 
+            y:620,
+            image: platformImage
+        }), 
+        new Platform({
+            x:platformImage.width * 8 - 17, 
+            y:620,
+            image: platformImage
+        })
+    ]
+
+    BackgroundThing = [
+        new BackgroundStuff({
+            x:-1,
+            y:-1,
+            image: backgroundImage,
+        }),
+        new BackgroundStuff({
+            x:0,
+            y:200,
+            image: hillsImage,
+        }),
+    ]
+    
+    scrollOffset = 0
+}
 
 //movement function
 function movement() {
@@ -211,39 +301,33 @@ function movement() {
 
 //left right movement
     if (keys.right.pressed && player.position.x < 500) {
-        player.velocity.x = 5
+        player.velocity.x = 8
     }
     else if (keys.left.pressed && player.position.x > 100) {
-        player.velocity.x = -5
+        player.velocity.x = -8
     }
-//    else if (keys.up.pressed) {
-//        player.velocity.y -= 20
-//    }
     else {
         player.velocity.x = 0
 
         if (keys.right.pressed) {
-            scrollOffset += 5
+            scrollOffset += 8
             platforms.forEach((platform) => {
-                platform.position.x -= 5
+                platform.position.x -= 8
             })
             BackgroundThing.forEach(BackgroundStuff => {
-                BackgroundStuff.position.x -= 3
+                BackgroundStuff.position.x -= 6
             })
         }
         else if (keys.left.pressed) {
             scrollOffset -= 5
             platforms.forEach((platform) => {
-                platform.position.x += 5
+                platform.position.x += 8
             })
             BackgroundThing.forEach(BackgroundStuff => {
-                BackgroundStuff.position.x += 3
+                BackgroundStuff.position.x += 6
             })
         }
     }
-
-//    console.log(scrollOffset)
-//remove double jump?
 
 //platform landing
     platforms.forEach((platform) => {
@@ -258,10 +342,34 @@ function movement() {
             player.velocity.y = 0
         }
     })
-    if (scrollOffset > 2000) {
+
+    if (keys.right.pressed && theKey === 'right' && player.currentSprite !== player.sprites.run.right) {
+        player.frames = 1
+        player.currentSprite = player.sprites.run.right
+    }
+    else if (!keys.right.pressed && theKey === 'right' && player.currentSprite !== player.sprites.idle.right) {
+        player.frames = 1
+        player.currentSprite = player.sprites.idle.right
+    }
+    else if (keys.left.pressed && theKey === 'left' && player.currentSprite !== player.sprites.run.left) {
+        player.frames = 1
+        player.currentSprite = player.sprites.run.left
+    }
+    else if (!keys.left.pressed && theKey === 'left' && player.currentSprite !== player.sprites.idle.left) {
+        player.frames = 1
+        player.currentSprite = player.sprites.idle.left
+    }
+
+//winner winner
+    if (scrollOffset > 7000) {
         console.log('you win')
     }
+//try again
+    if (player.position.y > canvas.height) {
+        init()
+    }
 }
+
 movement()
 
 //key movements
@@ -271,22 +379,21 @@ addEventListener('keydown', ({ keyCode }) => {
         case 65:
             console.log('left')
             keys.left.pressed = true
-            player.currentSprite = player.sprites.run.left
+            theKey = 'left'
             break;
         
         case 83:
             console.log('down')
-            break
+            break;
         
         case 68:
             console.log('right')
             keys.right.pressed = true
-            player.currentSprite = player.sprites.run.right
+            theKey = 'right'
             break;
 
         case 87:
             console.log('up')
-//            keys.up.pressed = true
             player.velocity.y -= 20
             break
     }
@@ -298,7 +405,6 @@ addEventListener('keyup', ({ keyCode }) => {
         case 65:
             console.log('left')
             keys.left.pressed = false
-            player.currentSprite = player.sprites.idle.left
             break
         
         case 83:
@@ -308,7 +414,6 @@ addEventListener('keyup', ({ keyCode }) => {
         case 68:
             console.log('right')
             keys.right.pressed = false
-            player.currentSprite = player.sprites.idle.right
             break;
 
         case 87:
@@ -317,27 +422,3 @@ addEventListener('keyup', ({ keyCode }) => {
             break
     }
 })
-
-
-//add images part
-//function newImage(url, left, bottom) {
-//    let object = document.createElement('img')
-//    object.src = url
-//    object.style.position = 'fixed'
-//    object.style.left = left + 'px'
-//    object.style.bottom = bottom + 'px'
-//    document.body.append(object)
-//    return object
-//}
-
-//function newItem(url, left, bottom) {
-//    let item = newImage(url, left, bottom)
-
-//    item.addEventListener('dblclick', function(){
-//        item.remove()
-//    })
-    
-//    return item
-//}
-
-//newImage('assets/catrun1.png', 150, 500)
