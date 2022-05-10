@@ -4,14 +4,12 @@ const context = canvas.getContext('2d')
 
 console.log(context)
 canvas.width = 1176
-//document.body.clientWidth
 canvas.height = 730
-//document.body.clientHeight
 
 //gravity
 const gravity = 0.5
 
-//images
+//images (definitely a better way to do this)
 const platformImage = new Image()
 platformImage.src = './assets/ground1.png'
 const smallplatformImage = new Image()
@@ -22,6 +20,8 @@ const backgroundImage = new Image()
 backgroundImage.src = './assets/sky.png'
 const hillsImage = new Image()
 hillsImage.src = './assets/hills1.png'
+
+// cat sprite sheets from Beviuliin on Graphic Driver: https://graphicriver.net/item/cute-and-cubby-cat-sprites-game-character/36907693
 const idleRight = new Image()
 idleRight.src = './assets/idleRight.png'
 const idleLeft = new Image()
@@ -39,7 +39,7 @@ fallRight.src = './assets/fallRight.png'
 const fallLeft = new Image()
 fallLeft.src = './assets/fallLeft.png'
 
-//character
+// cat
 class Player {
     constructor() {
         this.position = {
@@ -85,6 +85,9 @@ class Player {
         )
     }
 
+
+// From Christopher Lis: https://youtu.be/4q2vvZn5aoo?t=742
+// Code that makes the character affected by gravity
     fall() {
         this.frames++
         if (this.frames > 17 && (this.currentSprite === this.sprites.idle.right || this.currentSprite === this.sprites.idle.left)) {
@@ -103,7 +106,7 @@ class Player {
         
     }
 }
-//platform
+// creates platforms
 class Platform {
     constructor({ x, y, image }) {
         this.position = {
@@ -121,7 +124,7 @@ class Platform {
     }
 }
 
-//background stuff
+// creates background items
 class BackgroundStuff {
     constructor({ x, y, image }) {
         this.position = {
@@ -140,8 +143,10 @@ class BackgroundStuff {
 }
 
 
-//base
+// base (before restart if lose scenario)
 let player = new Player()
+
+// places the platforms (probably a better way to do this)
 let platforms = [
     new Platform({
         x:-1,
@@ -210,6 +215,7 @@ let platforms = [
     })
 ]
 
+// creates sky and yarn balls
 let BackgroundThing = [
     new BackgroundStuff({
         x:-1,
@@ -223,8 +229,10 @@ let BackgroundThing = [
     }),
 ]
 
+// creates theKey that allows for sprites to change depending on their direction
 let theKey
 
+// creates key constants
 const keys = {
     right: {
         pressed: false
@@ -234,10 +242,10 @@ const keys = {
     }
 }
 
-//how far we go
+// how far we go
 let scrollOffset = 0
 
-//restart
+// restart if lose scenario
 function init() {
     player = new Player()
     platforms = [
@@ -245,13 +253,23 @@ function init() {
             x:-1,
             y:620,
             image: platformImage,
-        }), 
+        }),
+        new Platform({
+            x:platformImage.width * 5 + 275, 
+            y:280,
+            image: levelImage
+        }),  
+        new Platform({
+            x:platformImage.width * 10 + 275, 
+            y:470,
+            image: levelImage
+        }),  
         new Platform({
             x:platformImage.width - 3, 
             y:620,
             image: platformImage
         }), 
-       new Platform({
+        new Platform({
             x:platformImage.width * 2 - 5, 
             y:620,
             image: platformImage
@@ -262,7 +280,7 @@ function init() {
             image: platformImage
         }), 
         new Platform({
-            x:platformImage.width * 4, 
+            x:platformImage.width * 4 - 9, 
             y:620,
             image: platformImage
         }), 
@@ -277,17 +295,22 @@ function init() {
             image: platformImage
         }), 
         new Platform({
-            x:platformImage.width * 6 - 13, 
+            x:platformImage.width * 7 + 50, 
             y:620,
             image: platformImage
         }), 
         new Platform({
-            x:platformImage.width * 7 - 15, 
+            x:platformImage.width * 9 - 100, 
             y:620,
-            image: platformImage
+            image: smallplatformImage
         }), 
         new Platform({
-            x:platformImage.width * 8 - 17, 
+            x:platformImage.width * 10, 
+            y:620,
+            image: platformImage
+        }),
+        new Platform({
+            x:platformImage.width * 12, 
             y:620,
             image: platformImage
         })
@@ -309,7 +332,7 @@ function init() {
     scrollOffset = 0
 }
 
-//movement function
+// movement function
 function movement() {
     requestAnimationFrame(movement)
     context.fillStyle = 'white'
@@ -319,14 +342,12 @@ function movement() {
         BackgroundStuff.draw()
     })
 
-
-
     platforms.forEach((platform) => {
         platform.draw()
     })
     player.fall()
 
-//left right movement
+// left + right movement
     if (keys.right.pressed && player.position.x < 500) {
         player.velocity.x = 8
     }
@@ -336,6 +357,8 @@ function movement() {
     else {
         player.velocity.x = 0
 
+// From Christopher Lis: https://youtu.be/4q2vvZn5aoo?t=2667
+// Code that creates background scrolling as character moves
         if (keys.right.pressed) {
             scrollOffset += 8
             platforms.forEach((platform) => {
@@ -356,7 +379,8 @@ function movement() {
         }
     }
 
-//platform landing
+
+// platform landing
     platforms.forEach((platform) => {
         if (player.position.y + player.height <= 
             platform.position.y && 
@@ -369,7 +393,7 @@ function movement() {
             player.velocity.y = 0
         }
     })
-
+// changes to sprites depending on their direction
     if (keys.right.pressed && theKey === 'right' && player.currentSprite !== player.sprites.run.right) {
         player.frames = 1
         player.currentSprite = player.sprites.run.right
@@ -387,19 +411,21 @@ function movement() {
         player.currentSprite = player.sprites.idle.left
     }
 
-//winner winner
+// win scenario
     if (scrollOffset > 7000) {
         
     }
-//try again
+// lose scenario
     if (player.position.y > canvas.height) {
         init()
     }
 }
 
+// initiates movement
 movement()
 
-//key movements
+// from Kirupa: https://www.kirupa.com/canvas/moving_shapes_canvas_keyboard.htm
+// key movements
 addEventListener('keydown', ({ keyCode }) => {
     console.log(keyCode)
     switch (keyCode) {
@@ -421,6 +447,8 @@ addEventListener('keydown', ({ keyCode }) => {
 
         case 87:
             console.log('up')
+// from Stackoverflow: (can't currently find the question again, looking for it, sorry)
+// this bit of code prevents infinite jumping 
             if (event.repeat) {
                 return
             }
@@ -448,7 +476,6 @@ addEventListener('keyup', ({ keyCode }) => {
 
         case 87:
             console.log('up')
- //           keys.up.pressed = false
             break
     }
 })
