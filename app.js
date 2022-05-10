@@ -1,5 +1,3 @@
-//https://www.youtube.com/watch?v=4q2vvZn5aoo&t=278s
-
 //canvas
 const canvas = document.querySelector('canvas')
 const context = canvas.getContext('2d')
@@ -15,11 +13,15 @@ const gravity = 0.5
 
 //images
 const platformImage = new Image()
-platformImage.src = './assets/platform.png'
+platformImage.src = './assets/ground1.png'
+const smallplatformImage = new Image()
+smallplatformImage.src = './assets/ground3.png'
+const levelImage = new Image()
+levelImage.src = './assets/ground2.png'
 const backgroundImage = new Image()
-backgroundImage.src = './assets/background.png'
+backgroundImage.src = './assets/sky.png'
 const hillsImage = new Image()
-hillsImage.src = './assets/hills.png'
+hillsImage.src = './assets/hills1.png'
 const idleRight = new Image()
 idleRight.src = './assets/idleRight.png'
 const idleLeft = new Image()
@@ -145,7 +147,17 @@ let platforms = [
         x:-1,
         y:620,
         image: platformImage,
-    }), 
+    }),
+    new Platform({
+        x:platformImage.width * 5 + 275, 
+        y:280,
+        image: levelImage
+    }),  
+    new Platform({
+        x:platformImage.width * 10 + 275, 
+        y:470,
+        image: levelImage
+    }),  
     new Platform({
         x:platformImage.width - 3, 
         y:620,
@@ -172,17 +184,27 @@ let platforms = [
         image: platformImage
     }), 
     new Platform({
-        x:platformImage.width * 6 - 13, 
+        x:platformImage.width * 5 - 11, 
+        y:495,
+        image: platformImage
+    }), 
+    new Platform({
+        x:platformImage.width * 7 + 50, 
         y:620,
         image: platformImage
     }), 
     new Platform({
-        x:platformImage.width * 7 - 15, 
+        x:platformImage.width * 9 - 100, 
         y:620,
-        image: platformImage
+        image: smallplatformImage
     }), 
     new Platform({
-        x:platformImage.width * 8 - 17, 
+        x:platformImage.width * 10, 
+        y:620,
+        image: platformImage
+    }),
+    new Platform({
+        x:platformImage.width * 12, 
         y:620,
         image: platformImage
     })
@@ -240,13 +262,18 @@ function init() {
             image: platformImage
         }), 
         new Platform({
-            x:platformImage.width * 4 - 9, 
+            x:platformImage.width * 4, 
             y:620,
             image: platformImage
         }), 
         new Platform({
             x:platformImage.width * 5 - 11, 
             y:620,
+            image: platformImage
+        }), 
+        new Platform({
+            x:platformImage.width * 5 - 11, 
+            y:495,
             image: platformImage
         }), 
         new Platform({
@@ -362,7 +389,7 @@ function movement() {
 
 //winner winner
     if (scrollOffset > 7000) {
-        console.log('you win')
+        
     }
 //try again
     if (player.position.y > canvas.height) {
