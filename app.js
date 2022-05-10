@@ -10,6 +10,8 @@ canvas.height = 730
 const gravity = 0.5
 
 //images (definitely a better way to do this)
+const winnerImage = new Image()
+winnerImage.src = './assets/winner.png'
 const platformImage = new Image()
 platformImage.src = './assets/ground1.png'
 const smallplatformImage = new Image()
@@ -38,6 +40,14 @@ const fallRight = new Image()
 fallRight.src = './assets/fallRight.png'
 const fallLeft = new Image()
 fallLeft.src = './assets/fallLeft.png'
+
+// new image
+function newImage(url){
+    let image = document.createElement('img')
+    image.src = url
+    document.body.canvas.append(image)
+    return image
+}
 
 // cat
 class Player {
@@ -135,6 +145,25 @@ class BackgroundStuff {
         this.image = image
         this.width = image.width
         this.height = 20
+    }
+
+    draw() {
+        context.drawImage(this.image, this.position.x, this.position.y)
+    }
+}
+
+// create winner image
+class winnerWinner {
+    constructor({x, y, image}) {
+        this.position = {
+            x: x,
+            y: y,
+        }
+
+        this.image = image
+        this.width = image.width
+        this.height = image.height
+
     }
 
     draw() {
@@ -241,6 +270,7 @@ const keys = {
         pressed: false
     }
 }
+
 
 // how far we go
 let scrollOffset = 0
@@ -412,8 +442,8 @@ function movement() {
     }
 
 // win scenario
-    if (scrollOffset > 7000) {
-        
+    if (scrollOffset > 1000) {
+        context.drawImage(winnerImage, 350, 200)
     }
 // lose scenario
     if (player.position.y > canvas.height) {

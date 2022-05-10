@@ -1,7 +1,6 @@
 body {
     background: black;
     margin: 0;
-
     height: 100vh;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
@@ -11,7 +10,7 @@ h1, h2 {
 }
 
 .title {
-    color: #747474;
+    color: #aeda75;
     display: flex;
     align-items: center;
     justify-content: center;
