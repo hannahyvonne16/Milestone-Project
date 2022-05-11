@@ -407,7 +407,7 @@ function movement() {
 
 // From Christopher Lis: https://youtu.be/4q2vvZn5aoo?t=2667
 // Code that creates background scrolling as character moves
-        if (keys.right.pressed && scrollOffset < 8600) {
+        if (keys.right.pressed && scrollOffset < 8400) {
             scrollOffset += 8
             platforms.forEach((platform) => {
                 platform.position.x -= 8
