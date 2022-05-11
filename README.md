@@ -6,7 +6,7 @@ Bugs:
 - Sometimes starts weird and requires refresh.
 - If you go forward enough, you can turn back and run off the edge to the left near the starting point.
 - I have not found a way to remove double jump.
-- Sprite hit is too wide. Could not figure out how to make smaller in javascript. In an updated version, I'll need to reduce the size manually on the sprite sheet.
+- Sprite hit box is too wide. Could not figure out how to make smaller in javascript. In an updated version, I'll need to reduce the size manually on the sprite sheet.
 
 
 To Add in Future Updates:
