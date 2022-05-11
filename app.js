@@ -1,7 +1,9 @@
 // primary credits for teaching canvas basics and how-tos:
 // https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial
 // https://www.youtube.com/c/chriscourses
+// https://www.javascripttutorial.net/web-apis/javascript-canvas/ 
 // https://www.freecodecamp.org/news/how-displaying-an-image-on-html5-canvas-works-13e3f6a6c4bd/
+// https://mr-easy.github.io/2017-06-26-creating-spritesheet-animation-in-html5-canvas-using-javascript/
 
 
 //canvas
@@ -407,7 +409,7 @@ function movement() {
 
 // From Christopher Lis: https://youtu.be/4q2vvZn5aoo?t=2667
 // Code that creates background scrolling as character moves
-        if (keys.right.pressed && scrollOffset < 8500) {
+        if (keys.right.pressed && scrollOffset < 8400) {
             scrollOffset += 8
             platforms.forEach((platform) => {
                 platform.position.x -= 8
