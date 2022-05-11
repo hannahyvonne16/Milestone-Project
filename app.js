@@ -346,7 +346,22 @@ function init() {
             x:platformImage.width * 12, 
             y:620,
             image: platformImage
-        })
+        }),
+        new Platform({
+            x:platformImage.width * 13 + 300, 
+            y:620,
+            image: platformImage
+        }),
+        new Platform({
+            x:platformImage.width * 15, 
+            y:620,
+            image: platformImage
+        }),
+        new Platform({
+            x:platformImage.width * 15 + 370, 
+            y:538,
+            image: foodImage
+        }),
     ]
 
     BackgroundThing = [
