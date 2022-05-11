@@ -1,3 +1,9 @@
+// primary credits for teaching canvas basics and how-tos:
+// https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial
+// https://www.youtube.com/c/chriscourses
+// https://www.freecodecamp.org/news/how-displaying-an-image-on-html5-canvas-works-13e3f6a6c4bd/
+
+
 //canvas
 const canvas = document.querySelector('canvas')
 const context = canvas.getContext('2d')
@@ -20,8 +26,10 @@ const levelImage = new Image()
 levelImage.src = './assets/ground2.png'
 const backgroundImage = new Image()
 backgroundImage.src = './assets/sky.png'
-const hillsImage = new Image()
-hillsImage.src = './assets/hills1.png'
+const yarnImage = new Image()
+yarnImage.src = './assets/hills1.png'
+const foodImage = new Image()
+foodImage.src = './assets/foodbowl.png'
 
 // cat sprite sheets from Beviuliin on Graphic Driver: https://graphicriver.net/item/cute-and-cubby-cat-sprites-game-character/36907693
 const idleRight = new Image()
@@ -152,26 +160,6 @@ class BackgroundStuff {
     }
 }
 
-// create winner image
-class winnerWinner {
-    constructor({x, y, image}) {
-        this.position = {
-            x: x,
-            y: y,
-        }
-
-        this.image = image
-        this.width = image.width
-        this.height = image.height
-
-    }
-
-    draw() {
-        context.drawImage(this.image, this.position.x, this.position.y)
-    }
-}
-
-
 // base (before restart if lose scenario)
 let player = new Player()
 
@@ -241,7 +229,22 @@ let platforms = [
         x:platformImage.width * 12, 
         y:620,
         image: platformImage
-    })
+    }),
+    new Platform({
+        x:platformImage.width * 13 + 300, 
+        y:620,
+        image: platformImage
+    }),
+    new Platform({
+        x:platformImage.width * 15, 
+        y:620,
+        image: platformImage
+    }),
+    new Platform({
+        x:platformImage.width * 15 + 370, 
+        y:538,
+        image: foodImage
+    }),
 ]
 
 // creates sky and yarn balls
@@ -254,7 +257,7 @@ let BackgroundThing = [
     new BackgroundStuff({
         x:0,
         y:200,
-        image: hillsImage,
+        image: yarnImage,
     }),
 ]
 
@@ -355,7 +358,7 @@ function init() {
         new BackgroundStuff({
             x:0,
             y:200,
-            image: hillsImage,
+            image: yarnImage,
         }),
     ]
     
@@ -381,7 +384,7 @@ function movement() {
     if (keys.right.pressed && player.position.x < 500) {
         player.velocity.x = 8
     }
-    else if (keys.left.pressed && player.position.x > 100) {
+    else if ((keys.left.pressed && player.position.x > 100) || keys.left.pressed && scrollOffset === 100 && player.position.x > 100) {
         player.velocity.x = -8
     }
     else {
@@ -389,7 +392,7 @@ function movement() {
 
 // From Christopher Lis: https://youtu.be/4q2vvZn5aoo?t=2667
 // Code that creates background scrolling as character moves
-        if (keys.right.pressed) {
+        if (keys.right.pressed && scrollOffset < 8400) {
             scrollOffset += 8
             platforms.forEach((platform) => {
                 platform.position.x -= 8
@@ -398,7 +401,7 @@ function movement() {
                 BackgroundStuff.position.x -= 6
             })
         }
-        else if (keys.left.pressed) {
+        else if (keys.left.pressed && scrollOffset > 350) {
             scrollOffset -= 5
             platforms.forEach((platform) => {
                 platform.position.x += 8
@@ -442,7 +445,7 @@ function movement() {
     }
 
 // win scenario
-    if (scrollOffset > 1000) {
+    if (scrollOffset > 8100) {
         context.drawImage(winnerImage, 350, 200)
     }
 // lose scenario
