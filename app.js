@@ -90,7 +90,7 @@ class Player {
         this.currentSprite = this.sprites.idle.right
 
     }
-    
+
     character() {
         context.drawImage(
             this.currentSprite,
