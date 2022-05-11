@@ -19,6 +19,6 @@ The Zoomies is a sidescroller inspired by my cat Django. If you own a cat you kn
 - Make platform images prettier
 
 ## Graphics Credits
-Cat Sprite: https://graphicriver.net/item/cute-and-cubby-cat-sprites-game-character/36907693
-Yarn Ball Images: https://www.vexels.com/png-svg/preview/201831/wool-yarn-ball-cartoon?tap_s=576618-2da5a0
-All Other Graphics: Me
+- Cat Sprite: https://graphicriver.net/item/cute-and-cubby-cat-sprites-game-character/36907693
+- Yarn Ball Images: https://www.vexels.com/png-svg/preview/201831/wool-yarn-ball-cartoon?tap_s=576618-2da5a0
+- All Other Graphics: Me
